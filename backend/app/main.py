@@ -5,11 +5,30 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+
 from app.pdf_reader import extract_text_from_pdf
 from app.matcher import calculate_similarity
 from app.skills import compare_skills
 from app.recommendations import generate_recommendations
 from app.resume_analyzer import analyze_resume
+
+
+# ============================================================
+# SEMANTIC MODEL
+# ============================================================
+# Load the model ONCE when the backend starts.
+# Do NOT load it inside every API request.
+# This significantly improves matching performance.
+
+print("Loading semantic model...")
+
+semantic_model = SentenceTransformer(
+    "all-MiniLM-L6-v2"
+)
+
+print("Semantic model loaded successfully.")
 
 
 # ============================================================
@@ -29,7 +48,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "*",
+        "https://ai-resume-matcher-55qcinyxa-mannem-sumana-sris-projects.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -49,6 +71,18 @@ def home():
 
 
 # ============================================================
+# HEALTH CHECK
+# ============================================================
+
+@app.get("/health")
+def health_check():
+    return {
+        "status": "healthy",
+        "semantic_model": "loaded"
+    }
+
+
+# ============================================================
 # HELPER FUNCTION
 # ============================================================
 
@@ -57,26 +91,21 @@ def calculate_semantic_score(
     job_description: str
 ):
     """
-    Calculate semantic similarity between resume
-    and job description.
-    """
+    Calculate semantic similarity between
+    resume and job description.
 
-    semantic_score = 0.0
+    The SentenceTransformer model is loaded
+    only once when the application starts.
+    """
 
     try:
 
-        from sentence_transformers import SentenceTransformer
-        from sklearn.metrics.pairwise import cosine_similarity
-
-        model = SentenceTransformer(
-            "all-MiniLM-L6-v2"
-        )
-
-        embeddings = model.encode(
+        embeddings = semantic_model.encode(
             [
                 resume_text,
                 job_description
-            ]
+            ],
+            normalize_embeddings=True
         )
 
         similarity = cosine_similarity(
@@ -89,6 +118,14 @@ def calculate_semantic_score(
             2
         )
 
+        # Keep the score within 0-100
+        semantic_score = max(
+            0,
+            min(100, semantic_score)
+        )
+
+        return semantic_score
+
     except Exception as e:
 
         print(
@@ -96,9 +133,72 @@ def calculate_semantic_score(
             str(e)
         )
 
-        semantic_score = 0.0
+        return 0.0
 
-    return semantic_score
+
+# ============================================================
+# HELPER FUNCTION
+# ============================================================
+
+def calculate_skill_match_score(
+    required_skills,
+    matched_skills
+):
+    """
+    Calculate percentage of required skills
+    found in the resume.
+    """
+
+    if not required_skills:
+
+        return 0.0
+
+    score = (
+        len(matched_skills)
+        /
+        len(required_skills)
+    ) * 100
+
+    return round(
+        max(0, min(100, score)),
+        2
+    )
+
+
+# ============================================================
+# HELPER FUNCTION
+# ============================================================
+
+def calculate_final_score(
+    tfidf_score,
+    semantic_score,
+    skill_match_score
+):
+    """
+    Final Resume Match Score.
+
+    Weighting:
+        TF-IDF        = 15%
+        Semantic      = 35%
+        Skills        = 50%
+
+    Skills receive the highest weight because
+    explicit required technologies are highly
+    important for job matching.
+    """
+
+    final_score = (
+        (tfidf_score * 0.15)
+        +
+        (semantic_score * 0.35)
+        +
+        (skill_match_score * 0.50)
+    )
+
+    return round(
+        max(0, min(100, final_score)),
+        2
+    )
 
 
 # ============================================================
@@ -120,6 +220,7 @@ async def match_resume(
     )
 
     if not resume_text or not resume_text.strip():
+
         return {
             "error": "Could not extract text from the uploaded resume."
         }
@@ -142,32 +243,29 @@ async def match_resume(
         job_description
     )
 
-    resume_skills = skills["resume_skills"]
+    resume_skills = skills[
+        "resume_skills"
+    ]
 
-    required_skills = skills["required_skills"]
+    required_skills = skills[
+        "required_skills"
+    ]
 
-    matched_skills = skills["matched_skills"]
+    matched_skills = skills[
+        "matched_skills"
+    ]
 
-    missing_skills = skills["missing_skills"]
+    missing_skills = skills[
+        "missing_skills"
+    ]
 
     # --------------------------------------------------------
     # 4. SKILL MATCH SCORE
     # --------------------------------------------------------
 
-    if len(required_skills) > 0:
-
-        skill_match_score = (
-            len(matched_skills)
-            / len(required_skills)
-        ) * 100
-
-    else:
-
-        skill_match_score = 0
-
-    skill_match_score = round(
-        skill_match_score,
-        2
+    skill_match_score = calculate_skill_match_score(
+        required_skills,
+        matched_skills
     )
 
     # --------------------------------------------------------
@@ -183,17 +281,10 @@ async def match_resume(
     # 6. FINAL MATCH SCORE
     # --------------------------------------------------------
 
-    final_match_score = (
-        (tfidf_score * 0.20)
-        +
-        (semantic_score * 0.40)
-        +
-        (skill_match_score * 0.40)
-    )
-
-    final_match_score = round(
-        final_match_score,
-        2
+    final_match_score = calculate_final_score(
+        tfidf_score,
+        semantic_score,
+        skill_match_score
     )
 
     # --------------------------------------------------------
@@ -219,7 +310,10 @@ async def match_resume(
 
     return {
 
-        "tfidf_score": tfidf_score,
+        "tfidf_score": round(
+            tfidf_score,
+            2
+        ),
 
         "semantic_score": semantic_score,
 
@@ -295,6 +389,7 @@ async def match_multiple(
         job_description = job.description
 
         if not job_description.strip():
+
             continue
 
         # ----------------------------------------------------
@@ -331,20 +426,9 @@ async def match_multiple(
         # SKILL MATCH SCORE
         # ----------------------------------------------------
 
-        if len(required_skills) > 0:
-
-            skill_match_score = (
-                len(matched_skills)
-                / len(required_skills)
-            ) * 100
-
-        else:
-
-            skill_match_score = 0
-
-        skill_match_score = round(
-            skill_match_score,
-            2
+        skill_match_score = calculate_skill_match_score(
+            required_skills,
+            matched_skills
         )
 
         # ----------------------------------------------------
@@ -360,17 +444,10 @@ async def match_multiple(
         # FINAL SCORE
         # ----------------------------------------------------
 
-        final_match_score = (
-            (tfidf_score * 0.20)
-            +
-            (semantic_score * 0.40)
-            +
-            (skill_match_score * 0.40)
-        )
-
-        final_match_score = round(
-            final_match_score,
-            2
+        final_match_score = calculate_final_score(
+            tfidf_score,
+            semantic_score,
+            skill_match_score
         )
 
         # ----------------------------------------------------
@@ -459,7 +536,9 @@ async def match_multiple_pdf(
 
     try:
 
-        jobs_data = json.loads(jobs)
+        jobs_data = json.loads(
+            jobs
+        )
 
     except json.JSONDecodeError:
 
@@ -507,6 +586,7 @@ async def match_multiple_pdf(
         )
 
         if not job_description.strip():
+
             continue
 
         # ----------------------------------------------------
@@ -543,20 +623,9 @@ async def match_multiple_pdf(
         # SKILL SCORE
         # ----------------------------------------------------
 
-        if len(required_skills) > 0:
-
-            skill_match_score = (
-                len(matched_skills)
-                / len(required_skills)
-            ) * 100
-
-        else:
-
-            skill_match_score = 0
-
-        skill_match_score = round(
-            skill_match_score,
-            2
+        skill_match_score = calculate_skill_match_score(
+            required_skills,
+            matched_skills
         )
 
         # ----------------------------------------------------
@@ -572,17 +641,10 @@ async def match_multiple_pdf(
         # FINAL SCORE
         # ----------------------------------------------------
 
-        final_match_score = (
-            (tfidf_score * 0.20)
-            +
-            (semantic_score * 0.40)
-            +
-            (skill_match_score * 0.40)
-        )
-
-        final_match_score = round(
-            final_match_score,
-            2
+        final_match_score = calculate_final_score(
+            tfidf_score,
+            semantic_score,
+            skill_match_score
         )
 
         # ----------------------------------------------------
