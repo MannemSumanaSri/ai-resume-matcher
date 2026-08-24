@@ -1,72 +1,276 @@
 import { useState } from "react";
 import axios from "axios";
+
+import JobRanking from "./components/JobRanking";
+
 import "./App.css";
 
+
 function App() {
+
+  // =========================================================
+  // STATE
+  // =========================================================
+
   const [resume, setResume] = useState(null);
+
   const [jobDescription, setJobDescription] = useState("");
+
   const [result, setResult] = useState(null);
+
+  const [jobRanking, setJobRanking] = useState([]);
+
   const [loading, setLoading] = useState(false);
+
+  const [rankingLoading, setRankingLoading] = useState(false);
+
   const [error, setError] = useState("");
 
+  const [rankingError, setRankingError] = useState("");
+
+
   // =========================================================
-  // ANALYZE RESUME
+  // API URL
   // =========================================================
 
-  const handleAnalyze = async () => {
-    // Validate resume
-    if (!resume) {
-      setError("Please upload your resume PDF.");
-      return;
-    }
+  const API_URL =
+    import.meta.env.VITE_API_URL ||
+    "http://127.0.0.1:8000";
 
-    // Validate job description
-    if (!jobDescription.trim()) {
-      setError("Please enter a job description.");
-      return;
-    }
 
-    setLoading(true);
-    setError("");
-    setResult(null);
+  // =========================================================
+  // ANALYZE RESUME AGAINST ONE JOB
+  // =========================================================
 
-    // Create multipart form data
+const handleAnalyze = async () => {
+  if (!resume) {
+    setError("Please upload your resume PDF.");
+    return;
+  }
+
+  if (!jobDescription.trim()) {
+    setError("Please enter a job description.");
+    return;
+  }
+
+  setLoading(true);
+  setError("");
+  setResult(null);
+
+  try {
     const formData = new FormData();
 
     formData.append("resume", resume);
-    formData.append("job_description", jobDescription);
+    formData.append(
+      "job_description",
+      jobDescription.trim()
+    );
 
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/match`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/match`,
+      formData,
+      {
+        timeout: 120000,
+      }
+    );
+
+    if (response.data?.error) {
+      throw new Error(
+        response.data.error
+      );
+    }
+
+    setResult(response.data);
+
+  } catch (err) {
+    console.error(
+      "RESUME ANALYSIS ERROR:",
+      err
+    );
+
+    if (err.code === "ECONNABORTED") {
+      setError(
+        "Analysis is taking longer than expected. Please try again."
+      );
+    } else if (err.response) {
+      setError(
+        `Server error: ${
+          err.response.data?.detail ||
+          err.response.data?.error ||
+          err.response.status
+        }`
+      );
+    } else {
+      setError(
+        "Unable to connect to the backend. Make sure FastAPI is running."
+      );
+    }
+
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  // =========================================================
+  // FIND BEST JOBS
+  // =========================================================
+
+  const findBestJobs = async () => {
+
+    if (!resume) {
+
+      setRankingError(
+        "Please upload your resume PDF first."
       );
 
-      setResult(response.data);
+      return;
+    }
+
+
+    setRankingLoading(true);
+
+    setRankingError("");
+
+    setJobRanking([]);
+
+
+    /*
+      These are sample jobs for now.
+
+      Later we will replace these with:
+      - database jobs
+      - job API
+      - scraped job listings
+      - user-selected jobs
+    */
+
+    const jobs = [
+
+      {
+        title:
+          "Frontend Developer",
+
+        description:
+          "We are looking for a frontend developer with JavaScript, React, HTML, CSS, Git and REST API experience."
+      },
+
+
+      {
+        title:
+          "Python Backend Developer",
+
+        description:
+          "We are looking for a Python backend developer with Python, Node.js, Express, MongoDB, PostgreSQL, SQL, REST API and Git experience."
+      },
+
+
+      {
+        title:
+          "Full Stack Developer",
+
+        description:
+          "We are looking for a full stack developer with JavaScript, React, Node.js, Express, MongoDB, SQL, Git and Docker experience."
+      },
+
+
+      {
+        title:
+          "Cloud Developer",
+
+        description:
+          "We are looking for a cloud developer with Python, AWS, Docker, Kubernetes and cloud deployment experience."
+      },
+
+
+      {
+        title:
+          "Software Developer",
+
+        description:
+          "We are looking for a software developer with Python, JavaScript, React, Node.js, Express, MongoDB, SQL, Git, Docker and AWS."
+      }
+
+    ];
+
+
+    const formData = new FormData();
+
+
+    formData.append(
+      "resume",
+      resume
+    );
+
+
+    formData.append(
+      "jobs",
+      JSON.stringify(jobs)
+    );
+
+
+    try {
+
+      const response = await axios.post(
+
+        `${API_URL}/match-multiple-pdf`,
+
+        formData,
+
+        {
+          headers: {
+            "Content-Type":
+              "multipart/form-data",
+          },
+        }
+
+      );
+
+
+      if (response.data.error) {
+
+        setRankingError(
+          response.data.error
+        );
+
+        return;
+      }
+
+
+      setJobRanking(
+        response.data.results || []
+      );
+
+
     } catch (err) {
+
       console.error(err);
 
+
       if (err.response) {
-        setError(
+
+        setRankingError(
           `Server error: ${
             err.response.data?.detail ||
             err.response.data?.error ||
             err.response.status
           }`
         );
+
       } else {
-        setError(
+
+        setRankingError(
           "Unable to connect to the backend. Make sure FastAPI is running."
         );
+
       }
+
     } finally {
-      setLoading(false);
+
+      setRankingLoading(false);
+
     }
+
   };
 
 
@@ -75,19 +279,27 @@ function App() {
   // =========================================================
 
   const getScoreClass = (score) => {
+
     if (score >= 75) {
+
       return "score-excellent";
+
     }
 
     if (score >= 50) {
+
       return "score-good";
+
     }
 
     if (score >= 30) {
+
       return "score-average";
+
     }
 
     return "score-low";
+
   };
 
 
@@ -96,23 +308,33 @@ function App() {
   // =========================================================
 
   const getScoreMessage = (score) => {
+
     if (score >= 80) {
+
       return "Excellent match! Your resume is highly aligned with this job.";
+
     }
 
     if (score >= 65) {
+
       return "Strong match! You have most of the skills required.";
+
     }
 
     if (score >= 50) {
+
       return "Good match, but there are some skills you should improve.";
+
     }
 
     if (score >= 30) {
+
       return "Moderate match. Consider improving your resume for this role.";
+
     }
 
     return "Low match. You should work on the missing skills.";
+
   };
 
 
@@ -121,20 +343,44 @@ function App() {
   // =========================================================
 
   const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
+
+    const selectedFile =
+      event.target.files[0];
+
 
     if (!selectedFile) {
+
       return;
+
     }
 
-    if (selectedFile.type !== "application/pdf") {
-      setError("Please upload a PDF file.");
+
+    if (
+      selectedFile.type !==
+      "application/pdf"
+    ) {
+
+      setError(
+        "Please upload a PDF file."
+      );
+
       setResume(null);
+
       return;
+
     }
 
-    setResume(selectedFile);
+
+    setResume(
+      selectedFile
+    );
+
     setError("");
+
+    setResult(null);
+
+    setJobRanking([]);
+
   };
 
 
@@ -143,16 +389,32 @@ function App() {
   // =========================================================
 
   const handleClear = () => {
+
     setResume(null);
+
     setJobDescription("");
+
     setResult(null);
+
+    setJobRanking([]);
+
     setError("");
 
-    const fileInput = document.getElementById("resume-upload");
+    setRankingError("");
+
+
+    const fileInput =
+      document.getElementById(
+        "resume-upload"
+      );
+
 
     if (fileInput) {
+
       fileInput.value = "";
+
     }
+
   };
 
 
@@ -161,7 +423,9 @@ function App() {
   // =========================================================
 
   return (
+
     <div className="app">
+
 
       {/* =====================================================
           HEADER
@@ -173,9 +437,11 @@ function App() {
           🤖
         </div>
 
+
         <h1>
           AI Resume & Job Matcher
         </h1>
+
 
         <p>
           Analyze your resume against a job description using
@@ -186,8 +452,9 @@ function App() {
       </header>
 
 
+
       {/* =====================================================
-          MAIN CONTAINER
+          MAIN
       ===================================================== */}
 
       <main className="container">
@@ -200,9 +467,9 @@ function App() {
         <div className="input-section">
 
 
-          {/* -------------------------------------------------
+          {/* =================================================
               RESUME UPLOAD
-          ------------------------------------------------- */}
+          ================================================= */}
 
           <div className="input-card">
 
@@ -210,9 +477,11 @@ function App() {
               📄
             </div>
 
+
             <h2>
               Upload Resume
             </h2>
+
 
             <p className="input-description">
               Upload your resume in PDF format.
@@ -228,9 +497,11 @@ function App() {
                 📤
               </span>
 
+
               <span>
                 Click to upload your resume
               </span>
+
 
               <small>
                 PDF files only
@@ -265,9 +536,10 @@ function App() {
           </div>
 
 
-          {/* -------------------------------------------------
+
+          {/* =================================================
               JOB DESCRIPTION
-          ------------------------------------------------- */}
+          ================================================= */}
 
           <div className="input-card">
 
@@ -275,9 +547,11 @@ function App() {
               💼
             </div>
 
+
             <h2>
               Job Description
             </h2>
+
 
             <p className="input-description">
               Paste the job description you want to compare
@@ -290,17 +564,25 @@ function App() {
               placeholder="Paste the job description here..."
               value={jobDescription}
               onChange={(event) =>
-                setJobDescription(event.target.value)
+                setJobDescription(
+                  event.target.value
+                )
               }
             />
 
+
             <div className="character-count">
-              {jobDescription.length} characters
+
+              {jobDescription.length}
+              {" "}
+              characters
+
             </div>
 
           </div>
 
         </div>
+
 
 
         {/* ===================================================
@@ -322,52 +604,97 @@ function App() {
         )}
 
 
+
         {/* ===================================================
             BUTTONS
         =================================================== */}
 
         <div className="analyze-container">
 
-          <button
-            className="analyze-button"
-            onClick={handleAnalyze}
-            disabled={loading}
-          >
-
-            {loading ? (
-
-              <>
-                <span className="loading-spinner"></span>
-                Analyzing Resume...
-              </>
-
-            ) : (
-
-              <>
-                ✨ Analyze Resume
-              </>
-
-            )}
-
-          </button>
+  <button
+    className="analyze-button"
+    onClick={handleAnalyze}
+    disabled={loading}
+  >
+    {loading ? (
+      <>
+        <span className="loading-spinner"></span>
+        Analyzing Resume...
+      </>
+    ) : (
+      <>
+        ✨ Analyze Resume
+      </>
+    )}
+  </button>
 
 
-          {result && (
+  <button
+    className="analyze-button"
+    onClick={findBestJobs}
+    disabled={rankingLoading}
+  >
+    {rankingLoading ? (
+      <>
+        <span className="loading-spinner"></span>
+        Finding Jobs...
+      </>
+    ) : (
+      <>
+        🔎 Find Best Job Matches
+      </>
+    )}
+  </button>
 
-            <button
-              className="clear-button"
-              onClick={handleClear}
-            >
-              Clear
-            </button>
 
-          )}
+  {(result || jobRanking.length > 0) && (
+    <button
+      className="clear-button"
+      onClick={handleClear}
+    >
+      Clear
+    </button>
+  )}
 
-        </div>
+</div>
 
 
         {/* ===================================================
-            RESULTS
+            JOB RANKING ERROR
+        =================================================== */}
+
+        {rankingError && (
+
+          <div className="error-message">
+
+            ⚠️
+
+            <span>
+              {rankingError}
+            </span>
+
+          </div>
+
+        )}
+
+
+
+        {/* ===================================================
+            BEST JOB MATCHES
+        =================================================== */}
+
+        {jobRanking.length > 0 && (
+
+          <JobRanking
+            results={jobRanking}
+          />
+
+        )}
+
+
+
+        {/* ===================================================
+            SINGLE JOB RESULTS
         =================================================== */}
 
         {result && (
@@ -399,6 +726,7 @@ function App() {
               </div>
 
 
+
               <div
                 className={`main-score ${getScoreClass(
                   result.final_match_score
@@ -416,11 +744,15 @@ function App() {
               </div>
 
 
+
               <p className="score-description">
+
                 {getScoreMessage(
                   result.final_match_score
                 )}
+
               </p>
+
 
 
               {/* SCORE BREAKDOWN */}
@@ -449,6 +781,7 @@ function App() {
                 </div>
 
 
+
                 <div className="score-card">
 
                   <div className="score-card-icon">
@@ -468,6 +801,7 @@ function App() {
                   </span>
 
                 </div>
+
 
 
                 <div className="score-card">
@@ -493,6 +827,7 @@ function App() {
               </div>
 
             </div>
+
 
 
             {/* =================================================
@@ -525,6 +860,7 @@ function App() {
                       </span>
 
                     )
+
                   )
 
                 ) : (
@@ -538,6 +874,7 @@ function App() {
               </div>
 
             </div>
+
 
 
             {/* =================================================
@@ -571,6 +908,7 @@ function App() {
                       </span>
 
                     )
+
                   )
 
                 ) : (
@@ -584,6 +922,7 @@ function App() {
               </div>
 
             </div>
+
 
 
             {/* =================================================
@@ -617,6 +956,7 @@ function App() {
                       </span>
 
                     )
+
                   )
 
                 ) : (
@@ -632,12 +972,12 @@ function App() {
             </div>
 
 
+
             {/* =================================================
                 AI RECOMMENDATIONS
             ================================================= */}
 
             <div className="recommendations-section">
-
 
               <div className="recommendations-header">
 
@@ -673,7 +1013,6 @@ function App() {
                         className="recommendation-card"
                         key={index}
                       >
-
 
                         <div className="recommendation-title">
 
@@ -734,6 +1073,7 @@ function App() {
             </div>
 
 
+
             {/* =================================================
                 RESUME STRENGTH ANALYSIS
             ================================================= */}
@@ -742,8 +1082,6 @@ function App() {
 
               <div className="resume-analysis-section">
 
-
-                {/* HEADER */}
 
                 <div className="analysis-header">
 
@@ -776,7 +1114,6 @@ function App() {
                 </div>
 
 
-                {/* STATS */}
 
                 <div className="analysis-stats">
 
@@ -798,6 +1135,7 @@ function App() {
                   </div>
 
 
+
                   <div className="analysis-stat">
 
                     <span>
@@ -815,6 +1153,7 @@ function App() {
                   </div>
 
 
+
                   <div className="analysis-stat">
 
                     <span>
@@ -822,7 +1161,11 @@ function App() {
                     </span>
 
                     <strong>
-                      {result.resume_analysis.detected_sections?.length || 0}
+                      {
+                        result.resume_analysis
+                          .detected_sections
+                          ?.length || 0
+                      }
                     </strong>
 
                     <p>
@@ -832,6 +1175,7 @@ function App() {
                   </div>
 
                 </div>
+
 
 
                 {/* DETECTED SECTIONS */}
@@ -845,20 +1189,23 @@ function App() {
 
                   <div className="section-tags">
 
-                    {result.resume_analysis.detected_sections?.length > 0 ? (
+                    {result.resume_analysis
+                      .detected_sections?.length > 0 ? (
 
-                      result.resume_analysis.detected_sections.map(
-                        (section, index) => (
+                      result.resume_analysis
+                        .detected_sections
+                        .map(
+                          (section, index) => (
 
-                          <span
-                            className="section-tag"
-                            key={index}
-                          >
-                            ✓ {section}
-                          </span>
+                            <span
+                              className="section-tag"
+                              key={index}
+                            >
+                              ✓ {section}
+                            </span>
 
+                          )
                         )
-                      )
 
                     ) : (
 
@@ -873,6 +1220,7 @@ function App() {
                 </div>
 
 
+
                 {/* STRENGTHS */}
 
                 <div className="analysis-block">
@@ -882,30 +1230,33 @@ function App() {
                   </h3>
 
 
-                  {result.resume_analysis.strengths?.length > 0 ? (
+                  {result.resume_analysis
+                    .strengths?.length > 0 ? (
 
                     <div className="feedback-list">
 
-                      {result.resume_analysis.strengths.map(
-                        (strength, index) => (
+                      {result.resume_analysis
+                        .strengths
+                        .map(
+                          (strength, index) => (
 
-                          <div
-                            className="feedback-item strength-item"
-                            key={index}
-                          >
+                            <div
+                              className="feedback-item strength-item"
+                              key={index}
+                            >
 
-                            <span>
-                              ✓
-                            </span>
+                              <span>
+                                ✓
+                              </span>
 
-                            <p>
-                              {strength}
-                            </p>
+                              <p>
+                                {strength}
+                              </p>
 
-                          </div>
+                            </div>
 
-                        )
-                      )}
+                          )
+                        )}
 
                     </div>
 
@@ -920,6 +1271,7 @@ function App() {
                 </div>
 
 
+
                 {/* SUGGESTIONS */}
 
                 <div className="analysis-block">
@@ -929,30 +1281,33 @@ function App() {
                   </h3>
 
 
-                  {result.resume_analysis.suggestions?.length > 0 ? (
+                  {result.resume_analysis
+                    .suggestions?.length > 0 ? (
 
                     <div className="feedback-list">
 
-                      {result.resume_analysis.suggestions.map(
-                        (suggestion, index) => (
+                      {result.resume_analysis
+                        .suggestions
+                        .map(
+                          (suggestion, index) => (
 
-                          <div
-                            className="feedback-item suggestion-item"
-                            key={index}
-                          >
+                            <div
+                              className="feedback-item suggestion-item"
+                              key={index}
+                            >
 
-                            <span>
-                              !
-                            </span>
+                              <span>
+                                !
+                              </span>
 
-                            <p>
-                              {suggestion}
-                            </p>
+                              <p>
+                                {suggestion}
+                              </p>
 
-                          </div>
+                            </div>
 
-                        )
-                      )}
+                          )
+                        )}
 
                     </div>
 
@@ -977,6 +1332,7 @@ function App() {
       </main>
 
 
+
       {/* =====================================================
           FOOTER
       ===================================================== */}
@@ -997,7 +1353,10 @@ function App() {
       </footer>
 
     </div>
+
   );
+
 }
+
 
 export default App;

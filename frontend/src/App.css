@@ -1492,3 +1492,348 @@ textarea {
   }
 
 }
+/* =========================================================
+   MATCH RESULT UI IMPROVEMENTS
+   These styles are intentionally scoped so they don't
+   affect the existing upload/job-description UI.
+   ========================================================= */
+
+.match-result .skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.match-result .skill-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #f4f6ff;
+  border: 1px solid #cdd5ff;
+  color: #3f46a5;
+  white-space: nowrap;
+}
+
+.match-result .skill-chip.matched {
+  background: #effdf5;
+  border-color: #a6efc5;
+  color: #087443;
+}
+
+.match-result .skill-chip.missing {
+  background: #fff7ed;
+  border-color: #fdba74;
+  color: #c2410c;
+}
+
+/* Recommendation topics */
+
+.match-result .topic-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.match-result .topic-list span {
+  display: inline-block;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: #f5f6ff;
+  border: 1px solid #d9ddff;
+  font-size: 11px;
+  color: #4b4f9c;
+}
+
+/* Recommendation cards */
+
+.match-result .recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.match-result .recommendation-card {
+  padding: 16px;
+  border-radius: 14px;
+}
+
+/* Resume strength */
+
+.match-result .resume-strength {
+  margin-top: 15px;
+}
+
+.match-result .strength-bar-container {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.match-result .strength-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 10px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.match-result .strength-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.7s ease;
+}
+
+/* Resume statistics */
+
+.match-result .resume-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.match-result .resume-stat {
+  text-align: center;
+}
+
+/* Detected sections */
+
+.match-result .section-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.match-result .section-chip-list span {
+  display: inline-block;
+  padding: 7px 10px;
+  border-radius: 10px;
+}
+
+/* Strength list */
+
+.match-result .strength-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.match-result .strength-list div {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* Footer */
+
+.match-result .result-footer {
+  margin-top: 20px;
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+  .match-result .recommendation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .match-result .resume-stats {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================================================
+   JOB RANKING
+   ========================================================= */
+
+.job-ranking {
+  margin-top: 24px;
+  padding: 22px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #dfe3f0;
+  box-shadow: 0 5px 18px rgba(40, 50, 100, 0.06);
+}
+
+.ranking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+
+.ranking-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  color: #4f46e5;
+}
+
+.ranking-header h2 {
+  margin: 4px 0;
+  font-size: 20px;
+}
+
+.ranking-header p {
+  margin: 0;
+  font-size: 11px;
+  color: #667085;
+}
+
+.job-count {
+  padding: 7px 12px;
+  border-radius: 20px;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.job-ranking-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border-radius: 13px;
+  border: 1px solid #e5e7eb;
+  background: #fafbff;
+}
+
+.job-rank {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.job-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.job-info h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.job-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.job-metrics span {
+  padding: 5px 8px;
+  border-radius: 7px;
+  background: #f2f4f7;
+  color: #667085;
+  font-size: 10px;
+}
+
+.ranking-skills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.ranking-skills strong {
+  font-size: 10px;
+  color: #475467;
+}
+
+.ranking-skill {
+  padding: 4px 7px;
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.ranking-skill.matched {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.ranking-skill.missing {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.job-score {
+  width: 85px;
+  min-width: 85px;
+  text-align: center;
+}
+
+.job-score strong {
+  display: block;
+  font-size: 19px;
+}
+
+.job-score span {
+  display: block;
+  margin-top: 2px;
+  color: #667085;
+  font-size: 10px;
+}
+
+/* Score states */
+
+.job-ranking-card.excellent .job-score strong {
+  color: #079455;
+}
+
+.job-ranking-card.good .job-score strong {
+  color: #2563eb;
+}
+
+.job-ranking-card.average .job-score strong {
+  color: #d97706;
+}
+
+.job-ranking-card.low .job-score strong {
+  color: #dc2626;
+}
+
+/* Mobile */
+
+@media (max-width: 650px) {
+
+  .ranking-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .job-ranking-card {
+    align-items: flex-start;
+  }
+
+  .job-score {
+    width: 70px;
+    min-width: 70px;
+  }
+
+  .job-score strong {
+    font-size: 16px;
+  }
+}
