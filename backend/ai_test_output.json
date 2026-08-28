@@ -1,0 +1,143 @@
+Generating AI recommendations...
+OLLAMA RESPONSE:
+{'model': 'qwen3.5:0.8b', 'created_at': '2026-08-27T05:13:57.0285845Z', 'response': '[\n  {\n    "skill": "AWS",\n    "recommendation_type": "missing_skill",\n    "category": "Cloud",\n    "reason": "The target job explicitly requires deploying applications using AWS and container technologies, which is a critical requirement for this role. The candidate\'s existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional cloud expertise.",\n    "related_skills": ["Docker", "EC2"],\n    "topics": ["AWS fundamentals", "EC2", "S3"],\n    "learning_path": [\n      "Learn AWS fundamentals",\n      "Learn EC2 and S3",\n      "Deploy a project on AWS"\n    ],\n    "priority": "high"\n  },\n  {\n    "skill": "Docker",\n    "recommendation_type": "missing_skill",\n    "category": "DevOps",\n    "reason": "The job description explicitly requires deploying applications using Docker and container technologies. The candidate\'s existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional containerization expertise.",\n    "related_skills": ["Docker", "EC2"],\n    "topics": ["Docker fundamentals", "Container orchestration", "CI/CD pipelines"],\n    "learning_path": [\n      "Learn Docker fundamentals",\n      "Learn Container orchestration",\n      "Deploy a project on AWS"\n    ],\n    "priority": "high"\n  },\n  {\n    "skill": "TypeScript",\n    "recommendation_type": "missing_skill",\n    "category": "Frontend",\n    "reason": "The target job explicitly requires TypeScript. The candidate\'s existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional type safety and static analysis capabilities.",\n    "related_skills": ["Docker", "EC2"],\n    "topics": ["TypeScript fundamentals", "TypeScript best practices", "TypeScript for frontend"],\n    "learning_path": [\n      "Learn TypeScript fundamentals",\n      "Learn TypeScript best practices",\n      "Deploy a project on AWS"\n    ],\n    "priority": "high"\n  },\n  {\n    "skill": "GraphQL",\n    "recommendation_type": "missing_skill",\n    "category": "Backend/DevOps",\n    "reason": "The target job explicitly requires GraphQL. The candidate\'s existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional query optimization and schema design capabilities.",\n    "related_skills": ["Docker", "EC2"],\n    "topics": ["GraphQL fundamentals", "GraphQL best practices", "Schema design"],\n    "learning_path": [\n      "Learn GraphQL fundamentals",\n      "Learn GraphQL best practices",\n      "Deploy a project on AWS"\n    ],\n    "priority": "high"\n  },\n  {\n    "skill": "Redis",\n    "recommendation_type": "missing_skill",\n    "category": "Backend/DevOps",\n    "reason": "The target job explicitly requires Redis. The candidate\'s existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional caching and session management capabilities.",\n    "related_skills": ["Docker", "EC2"],\n    "topics": ["Redis fundamentals", "Redis best practices", "Session management"],\n    "learning_path": [\n      "Learn Redis fundamentals",\n      "Learn Redis best practices",\n      "Deploy a project on AWS"\n    ],\n    "priority": "high"\n  },\n  {\n    "skill": "Kubernetes",\n    "recommendation_type": "missing_skill",\n    "category": "DevOps",\n    "reason": "The target job explicitly requires Kubernetes. The candidate\'s existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional orchestration and deployment capabilities.",\n    "related_skills": ["Docker", "EC2"],\n    "topics": ["Kubernetes fundamentals", "Container orchestration", "Deployment strategies"],\n    "learning_path": [\n      "Learn Kubernetes fundamentals",\n      "Learn Container orchestration",\n      "Deploy a project on AWS"\n    ],\n    "priority": "high"\n  }\n]', 'done': True, 'done_reason': 'stop', 'context': [248045, 846, 198, 2523, 513, 449, 14791, 6715, 26785, 17313, 13, 271, 2014, 53983, 279, 8871, 15227, 321, 279, 2100, 2531, 3874, 13, 271, 61744, 32292, 25, 198, 746, 12, 271, 262, 8363, 13875, 24090, 440, 3039, 303, 198, 262, 12544, 11, 3473, 11, 5829, 2764, 11, 16888, 2764, 11, 198, 262, 24609, 32251, 11, 43817, 11, 7622, 11, 20473, 321, 31038, 13, 271, 262, 31959, 2400, 54205, 3370, 8098, 1608, 279, 198, 262, 380, 13267, 5436, 321, 11205, 16163, 198, 262, 321, 22973, 13, 198, 14379, 6196, 11669, 7419, 25, 198, 746, 20308, 271, 262, 1165, 513, 3221, 364, 264, 8363, 13875, 24090, 198, 262, 440, 3039, 303, 12544, 11, 84441, 11, 198, 262, 3473, 11, 5829, 2764, 11, 16888, 2764, 11, 43817, 11, 198, 262, 24609, 32251, 11, 33926, 11, 33028, 11, 22521, 11, 39210, 11, 198, 262, 64135, 11, 20473, 321, 31038, 13, 271, 262, 561, 8871, 1220, 1870, 65905, 3370, 198, 262, 8098, 321, 10204, 8098, 1608, 198, 262, 22521, 321, 5303, 13900, 13, 198, 14379, 24285, 29254, 25, 198, 40698, 198, 34941, 11, 39210, 11, 84441, 11, 33926, 11, 33028, 11, 64135, 271, 7525, 3274, 369, 310, 6707, 33404, 6618, 18005, 198, 1891, 25835, 279, 7167, 7129, 9711, 3294, 13, 271, 5236, 4045, 6718, 7129, 421, 513, 2582, 2945, 303, 279, 15227, 13, 271, 2381, 1396, 7167, 9653, 11, 6707, 25, 271, 16, 13, 9653, 198, 17, 13, 26785, 1756, 198, 18, 13, 5407, 198, 19, 13, 2781, 198, 20, 13, 5265, 89780, 198, 21, 13, 12960, 198, 22, 13, 6618, 2551, 198, 23, 13, 10304, 271, 25177, 25, 271, 12, 3301, 25835, 2610, 4566, 13, 198, 12, 3301, 264, 4566, 1287, 13, 198, 12, 3054, 524, 958, 48794, 13, 198, 12, 3054, 524, 884, 39492, 4732, 279, 4566, 13, 198, 12, 13262, 18005, 14542, 321, 6715, 49549, 13, 198, 12, 5183, 18005, 383, 279, 4880, 2531, 3874, 13, 198, 12, 5272, 279, 8871, 579, 6149, 7129, 948, 21861, 5265, 7129, 13, 198, 12, 561, 6618, 1752, 1220, 4936, 494, 54939, 310, 14542, 10121, 13, 198, 12, 30871, 1902, 381, 6681, 799, 314, 25, 198, 220, 1496, 11, 10728, 11, 3238, 198, 12, 26785, 1756, 1902, 381, 25, 198, 220, 7167, 44106, 198, 12, 3054, 524, 16525, 8871, 3039, 13, 198, 12, 3054, 524, 3591, 421, 279, 8871, 682, 264, 9653, 421, 369, 7167, 13, 271, 18326, 4566, 5759, 25, 271, 58, 198, 220, 313, 198, 262, 328, 28493, 763, 328, 34941, 487, 198, 262, 328, 64338, 362, 1756, 763, 328, 29617, 44106, 487, 198, 262, 328, 5298, 763, 328, 15582, 487, 198, 262, 328, 19290, 763, 328, 814, 20139, 3069, 22521, 369, 2894, 364, 411, 3050, 2531, 10152, 198, 262, 328, 9433, 89780, 763, 4241, 35, 13266, 487, 328, 7263, 17, 7664, 198, 262, 328, 53298, 763, 4241, 34941, 54939, 487, 328, 7263, 17, 487, 328, 50, 18, 7664, 198, 262, 328, 20341, 2551, 763, 498, 198, 406, 328, 23079, 22521, 54939, 487, 198, 406, 328, 23079, 20007, 17, 321, 326, 18, 487, 198, 406, 328, 67112, 264, 2313, 383, 22521, 1, 198, 262, 10339, 198, 262, 328, 22845, 763, 328, 11553, 1, 198, 220, 333, 198, 60, 248046, 198, 248045, 74455, 198, 248068, 271, 248069, 271, 58, 198, 220, 313, 198, 262, 328, 28493, 763, 328, 34941, 487, 198, 262, 328, 64338, 362, 1756, 763, 328, 29617, 44106, 487, 198, 262, 328, 5298, 763, 328, 15582, 487, 198, 262, 328, 19290, 763, 328, 760, 2100, 2531, 20335, 7225, 58282, 8098, 1608, 22521, 321, 5303, 13900, 11, 864, 369, 264, 8751, 15808, 364, 411, 3364, 13, 561, 8871, 579, 6149, 7129, 318, 28514, 11, 3473, 11, 5829, 2764, 8, 513, 85188, 694, 37043, 310, 1870, 65905, 3370, 8098, 383, 279, 9158, 1973, 4945, 9158, 18163, 10152, 198, 262, 328, 9433, 89780, 763, 4241, 35, 13266, 487, 328, 7263, 17, 7664, 198, 262, 328, 53298, 763, 4241, 34941, 54939, 487, 328, 7263, 17, 487, 328, 50, 18, 7664, 198, 262, 328, 20341, 2551, 763, 498, 198, 406, 328, 23079, 22521, 54939, 487, 198, 406, 328, 23079, 20007, 17, 321, 326, 18, 487, 198, 406, 328, 67112, 264, 2313, 383, 22521, 1, 198, 262, 10339, 198, 262, 328, 22845, 763, 328, 11553, 1, 198, 220, 2390, 198, 220, 313, 198, 262, 328, 28493, 763, 328, 35, 13266, 487, 198, 262, 328, 64338, 362, 1756, 763, 328, 29617, 44106, 487, 198, 262, 328, 5298, 763, 328, 14172, 37616, 487, 198, 262, 328, 19290, 763, 328, 760, 2531, 3874, 20335, 7225, 58282, 8098, 1608, 39210, 321, 5303, 13900, 13, 561, 8871, 579, 6149, 7129, 318, 28514, 11, 3473, 11, 5829, 2764, 8, 513, 85188, 694, 37043, 310, 1870, 65905, 3370, 8098, 383, 279, 9158, 1973, 4945, 5303, 1954, 18163, 10152, 198, 262, 328, 9433, 89780, 763, 4241, 35, 13266, 487, 328, 7263, 17, 7664, 198, 262, 328, 53298, 763, 4241, 35, 13266, 54939, 487, 328, 4354, 67518, 2096, 487, 328, 10911, 14, 6281, 55739, 7664, 198, 262, 328, 20341, 2551, 763, 498, 198, 406, 328, 23079, 39210, 54939, 487, 198, 406, 328, 23079, 9390, 67518, 2096, 487, 198, 406, 328, 67112, 264, 2313, 383, 22521, 1, 198, 262, 10339, 198, 262, 328, 22845, 763, 328, 11553, 1, 198, 220, 2390, 198, 220, 313, 198, 262, 328, 28493, 763, 328, 900, 5726, 487, 198, 262, 328, 64338, 362, 1756, 763, 328, 29617, 44106, 487, 198, 262, 328, 5298, 763, 328, 22668, 400, 487, 198, 262, 328, 19290, 763, 328, 760, 2100, 2531, 20335, 7225, 84441, 13, 561, 8871, 579, 6149, 7129, 318, 28514, 11, 3473, 11, 5829, 2764, 8, 513, 85188, 694, 37043, 310, 1870, 65905, 3370, 8098, 383, 279, 9158, 1973, 4945, 913, 6925, 321, 1064, 6157, 16432, 10152, 198, 262, 328, 9433, 89780, 763, 4241, 35, 13266, 487, 328, 7263, 17, 7664, 198, 262, 328, 53298, 763, 4241, 900, 5726, 54939, 487, 328, 900, 5726, 1786, 12024, 487, 328, 900, 5726, 364, 44125, 7664, 198, 262, 328, 20341, 2551, 763, 498, 198, 406, 328, 23079, 84441, 54939, 487, 198, 406, 328, 23079, 84441, 1786, 12024, 487, 198, 406, 328, 67112, 264, 2313, 383, 22521, 1, 198, 262, 10339, 198, 262, 328, 22845, 763, 328, 11553, 1, 198, 220, 2390, 198, 220, 313, 198, 262, 328, 28493, 763, 328, 85586, 487, 198, 262, 328, 64338, 362, 1756, 763, 328, 29617, 44106, 487, 198, 262, 328, 5298, 763, 328, 28729, 14, 14172, 37616, 487, 198, 262, 328, 19290, 763, 328, 760, 2100, 2531, 20335, 7225, 33926, 13, 561, 8871, 579, 6149, 7129, 318, 28514, 11, 3473, 11, 5829, 2764, 8, 513, 85188, 694, 37043, 310, 1870, 65905, 3370, 8098, 383, 279, 9158, 1973, 4945, 3134, 24460, 321, 10485, 2790, 16432, 10152, 198, 262, 328, 9433, 89780, 763, 4241, 35, 13266, 487, 328, 7263, 17, 7664, 198, 262, 328, 53298, 763, 4241, 85586, 54939, 487, 328, 85586, 1786, 12024, 487, 328, 8368, 2790, 7664, 198, 262, 328, 20341, 2551, 763, 498, 198, 406, 328, 23079, 33926, 54939, 487, 198, 406, 328, 23079, 33926, 1786, 12024, 487, 198, 406, 328, 67112, 264, 2313, 383, 22521, 1, 198, 262, 10339, 198, 262, 328, 22845, 763, 328, 11553, 1, 198, 220, 2390, 198, 220, 313, 198, 262, 328, 28493, 763, 328, 46530, 487, 198, 262, 328, 64338, 362, 1756, 763, 328, 29617, 44106, 487, 198, 262, 328, 5298, 763, 328, 28729, 14, 14172, 37616, 487, 198, 262, 328, 19290, 763, 328, 760, 2100, 2531, 20335, 7225, 33028, 13, 561, 8871, 579, 6149, 7129, 318, 28514, 11, 3473, 11, 5829, 2764, 8, 513, 85188, 694, 37043, 310, 1870, 65905, 3370, 8098, 383, 279, 9158, 1973, 4945, 45850, 321, 3669, 6044, 16432, 10152, 198, 262, 328, 9433, 89780, 763, 4241, 35, 13266, 487, 328, 7263, 17, 7664, 198, 262, 328, 53298, 763, 4241, 46530, 54939, 487, 328, 46530, 1786, 12024, 487, 328, 5115, 6044, 7664, 198, 262, 328, 20341, 2551, 763, 498, 198, 406, 328, 23079, 33028, 54939, 487, 198, 406, 328, 23079, 33028, 1786, 12024, 487, 198, 406, 328, 67112, 264, 2313, 383, 22521, 1, 198, 262, 10339, 198, 262, 328, 22845, 763, 328, 11553, 1, 198, 220, 2390, 198, 220, 313, 198, 262, 328, 28493, 763, 328, 42, 28851, 487, 198, 262, 328, 64338, 362, 1756, 763, 328, 29617, 44106, 487, 198, 262, 328, 5298, 763, 328, 14172, 37616, 487, 198, 262, 328, 19290, 763, 328, 760, 2100, 2531, 20335, 7225, 64135, 13, 561, 8871, 579, 6149, 7129, 318, 28514, 11, 3473, 11, 5829, 2764, 8, 513, 85188, 694, 37043, 310, 1870, 65905, 3370, 8098, 383, 279, 9158, 1973, 4945, 67518, 2096, 321, 22449, 16432, 10152, 198, 262, 328, 9433, 89780, 763, 4241, 35, 13266, 487, 328, 7263, 17, 7664, 198, 262, 328, 53298, 763, 4241, 42, 28851, 54939, 487, 328, 4354, 67518, 2096, 487, 328, 72720, 14400, 7664, 198, 262, 328, 20341, 2551, 763, 498, 198, 406, 328, 23079, 64135, 54939, 487, 198, 406, 328, 23079, 9390, 67518, 2096, 487, 198, 406, 328, 67112, 264, 2313, 383, 22521, 1, 198, 262, 10339, 198, 262, 328, 22845, 763, 328, 11553, 1, 198, 220, 333, 198, 60], 'total_duration': 30699776100, 'load_duration': 4862400, 'prompt_eval_count': 533, 'prompt_eval_duration': 67947000, 'eval_count': 961, 'eval_duration': 30587003000}
+[
+  {
+    "skill": "AWS",
+    "recommendation_type": "missing_skill",
+    "category": "Cloud",
+    "reason": "The target job explicitly requires deploying applications using AWS and container technologies, which is a critical requirement for this role. The candidate's existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional cloud expertise.",
+    "related_skills": [
+      "Docker",
+      "EC2"
+    ],
+    "topics": [
+      "AWS fundamentals",
+      "EC2",
+      "S3"
+    ],
+    "learning_path": [
+      "Learn AWS fundamentals",
+      "Learn EC2 and S3",
+      "Deploy a project on AWS"
+    ],
+    "priority": "high",
+    "source": "ollama_qwen3.5",
+    "ai_generated": true
+  },
+  {
+    "skill": "Docker",
+    "recommendation_type": "missing_skill",
+    "category": "DevOps",
+    "reason": "The job description explicitly requires deploying applications using Docker and container technologies. The candidate's existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional containerization expertise.",
+    "related_skills": [
+      "Docker",
+      "EC2"
+    ],
+    "topics": [
+      "Docker fundamentals",
+      "Container orchestration",
+      "CI/CD pipelines"
+    ],
+    "learning_path": [
+      "Learn Docker fundamentals",
+      "Learn Container orchestration",
+      "Deploy a project on AWS"
+    ],
+    "priority": "high",
+    "source": "ollama_qwen3.5",
+    "ai_generated": true
+  },
+  {
+    "skill": "TypeScript",
+    "recommendation_type": "missing_skill",
+    "category": "Frontend",
+    "reason": "The target job explicitly requires TypeScript. The candidate's existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional type safety and static analysis capabilities.",
+    "related_skills": [
+      "Docker",
+      "EC2"
+    ],
+    "topics": [
+      "TypeScript fundamentals",
+      "TypeScript best practices",
+      "TypeScript for frontend"
+    ],
+    "learning_path": [
+      "Learn TypeScript fundamentals",
+      "Learn TypeScript best practices",
+      "Deploy a project on AWS"
+    ],
+    "priority": "high",
+    "source": "ollama_qwen3.5",
+    "ai_generated": true
+  },
+  {
+    "skill": "GraphQL",
+    "recommendation_type": "missing_skill",
+    "category": "Backend/DevOps",
+    "reason": "The target job explicitly requires GraphQL. The candidate's existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional query optimization and schema design capabilities.",
+    "related_skills": [
+      "Docker",
+      "EC2"
+    ],
+    "topics": [
+      "GraphQL fundamentals",
+      "GraphQL best practices",
+      "Schema design"
+    ],
+    "learning_path": [
+      "Learn GraphQL fundamentals",
+      "Learn GraphQL best practices",
+      "Deploy a project on AWS"
+    ],
+    "priority": "high",
+    "source": "ollama_qwen3.5",
+    "ai_generated": true
+  },
+  {
+    "skill": "Redis",
+    "recommendation_type": "missing_skill",
+    "category": "Backend/DevOps",
+    "reason": "The target job explicitly requires Redis. The candidate's existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional caching and session management capabilities.",
+    "related_skills": [
+      "Docker",
+      "EC2"
+    ],
+    "topics": [
+      "Redis fundamentals",
+      "Redis best practices",
+      "Session management"
+    ],
+    "learning_path": [
+      "Learn Redis fundamentals",
+      "Learn Redis best practices",
+      "Deploy a project on AWS"
+    ],
+    "priority": "high",
+    "source": "ollama_qwen3.5",
+    "ai_generated": true
+  },
+  {
+    "skill": "Kubernetes",
+    "recommendation_type": "missing_skill",
+    "category": "DevOps",
+    "reason": "The target job explicitly requires Kubernetes. The candidate's existing skills (JavaScript, React, Node.js) are foundational but insufficient to build scalable web applications on the cloud without additional orchestration and deployment capabilities.",
+    "related_skills": [
+      "Docker",
+      "EC2"
+    ],
+    "topics": [
+      "Kubernetes fundamentals",
+      "Container orchestration",
+      "Deployment strategies"
+    ],
+    "learning_path": [
+      "Learn Kubernetes fundamentals",
+      "Learn Container orchestration",
+      "Deploy a project on AWS"
+    ],
+    "priority": "high",
+    "source": "ollama_qwen3.5",
+    "ai_generated": true
+  }
+]
